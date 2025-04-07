@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -6,6 +6,7 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ScheduleProvider } from './contexts/ScheduleContext';
 import TodayView from './views/TodayView';
 import ScheduleView from './views/ScheduleView';
@@ -55,6 +56,12 @@ function AppContent() {
 }
 
 function App() {
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
+
   return (
     <Router>
       <ScheduleProvider>
