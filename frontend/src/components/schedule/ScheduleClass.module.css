@@ -1,0 +1,65 @@
+.classCard {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 8px;
+  border: 1px solid #e5e7eb;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.classCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.subject {
+  font-weight: 500;
+  color: #111827;
+  margin: 0;
+}
+
+.teacher {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 4px 0 0 0;
+}
+
+.typeBadge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #4f46e5;
+  background-color: #eef2ff;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.details {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  height: 16px;
+  width: 16px;
+  margin-right: 4px;
+}
+
+.divider {
+  margin: 0 8px;
+  color: #d1d5db;
+}
