@@ -1,4 +1,11 @@
 import { useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import { ScheduleProvider } from './contexts/ScheduleContext';
 import TodayView from './views/TodayView';
 import ScheduleView from './views/ScheduleView';
@@ -6,31 +13,54 @@ import SettingsView from './views/SettingsView';
 import TabBar from './components/navigation/TabBar';
 import styles from './App.module.css';
 
-function App() {
-  const [activeTab, setActiveTab] = useState('schedule');
+function AppContent() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState(() => {
+    const path = location.pathname;
+    if (path === '/schedule') return 'schedule';
+    if (path === '/settings') return 'settings';
+    return 'today';
+  });
 
-  const renderActiveView = () => {
-    switch (activeTab) {
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    switch (tab) {
       case 'today':
-        return <TodayView />;
+        navigate('/');
+        break;
       case 'schedule':
-        return <ScheduleView />;
+        navigate('/schedule');
+        break;
       case 'settings':
-        return <SettingsView />;
+        navigate('/settings');
+        break;
       default:
-        return <ScheduleView />;
+        navigate('/');
     }
   };
 
   return (
-    <ScheduleProvider>
-      <div className={styles.appContainer}>
-        <div className={styles.viewContainer}>
-          {renderActiveView()}
-        </div>
-        <TabBar activeTab={activeTab} setActiveTab={setActiveTab} />
+    <div className={styles.appContainer}>
+      <div className={styles.viewContainer}>
+        <Routes>
+          <Route path="/" element={<TodayView />} />
+          <Route path="/schedule" element={<ScheduleView />} />
+          <Route path="/settings" element={<SettingsView />} />
+        </Routes>
       </div>
-    </ScheduleProvider>
+      <TabBar activeTab={activeTab} setActiveTab={handleTabChange} />
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <ScheduleProvider>
+        <AppContent />
+      </ScheduleProvider>
+    </Router>
   );
 }
 
