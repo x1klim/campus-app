@@ -1,3 +1,8 @@
 {
+  "navigation": {
+    "schedule": "Расписание",
+    "settings": "Настройки",
+    "today": "Сегодня"
+  },
   "title": "Кампус"
 }
