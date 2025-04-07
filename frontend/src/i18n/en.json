@@ -1,8 +1,24 @@
 {
+  "classTypes": {
+    "lab": "Lab",
+    "lecture": "Lecture",
+    "seminar": "Seminar"
+  },
   "navigation": {
     "schedule": "Schedule",
     "settings": "Settings",
     "today": "Today"
+  },
+  "settings": {
+    "schedulePreferences": "Schedule Preferences",
+    "languagePreferences": "Language Preferences",
+    "group": "Group",
+    "groupHelp": "Select your academic group",
+    "subgroup": "Subgroup",
+    "subgroupHelp": "Select your subgroup for labs and exercises",
+    "language": "Language",
+    "languageHelp": "Select your preferred language",
+    "showingScheduleFor": "Showing schedule for subgroup"
   },
   "title": "Campus"
 }

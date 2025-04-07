@@ -1,8 +1,24 @@
 {
+  "classTypes": {
+    "lab": "Лабораторная",
+    "lecture": "Лекция",
+    "seminar": "Семинар"
+  },
   "navigation": {
     "schedule": "Расписание",
     "settings": "Настройки",
     "today": "Сегодня"
+  },
+  "settings": {
+    "schedulePreferences": "Настройки расписания",
+    "languagePreferences": "Языковые настройки",
+    "group": "Группа",
+    "groupHelp": "Выберите вашу учебную группу",
+    "subgroup": "Подгруппа",
+    "subgroupHelp": "Выберите вашу подгруппу для лабораторных и практических",
+    "language": "Язык",
+    "languageHelp": "Выберите предпочитаемый язык",
+    "showingScheduleFor": "Показано расписание для подгруппы"
   },
   "title": "Кампус"
 }

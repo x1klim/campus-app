@@ -9,7 +9,7 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'ru',
-    lng: 'ru',
+    whitelist: ['en', 'ru'],
     detection: {
       order: ['localStorage', 'navigator'],
       caches: ['localStorage'],
@@ -23,6 +23,7 @@ i18n
     interpolation: {
       escapeValue: false, // React already protects from XSS
     },
+    saveMissing: true,
   });
 
 export default i18n;
