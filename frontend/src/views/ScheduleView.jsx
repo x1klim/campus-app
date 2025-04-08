@@ -1,11 +1,18 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSchedule } from '../contexts/ScheduleContext';
+import Header from '../components/navigation/Header';
 import DateSelector from '../components/schedule/DateSelector';
 import DaySchedule from '../components/schedule/DaySchedule';
 import styles from './ScheduleView.module.css';
+import { useTranslation } from 'react-i18next';
 
 const ScheduleView = () => {
-  const { getCurrentWeekDates } = useSchedule();
+  const {
+    getCurrentWeekDates,
+    checkHasClassesOnDate,
+    getSemesterWeekNumberForDate,
+    getWeekTypeForDate,
+  } = useSchedule();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [weekOffset, setWeekOffset] = useState(0);
   const [weekDates, setWeekDates] = useState(() => {
@@ -47,20 +54,53 @@ const ScheduleView = () => {
     setWeekOffset((prev) => prev + 1);
   }, []);
 
+  // Calculate which dates in the current week have classes
+  const datesWithClasses = useMemo(() => {
+    if (!weekDates) return [];
+    return weekDates.filter((date) => checkHasClassesOnDate(date));
+  }, [weekDates, checkHasClassesOnDate]);
+
+  // Get week number and type for the selected date
+  const weekInfo = useMemo(() => {
+    if (!selectedDate) return { number: 0, type: 'a' };
+
+    const weekNumber = getSemesterWeekNumberForDate(selectedDate);
+    const weekType = getWeekTypeForDate(selectedDate);
+
+    return {
+      number: weekNumber,
+      type: weekType.toUpperCase(),
+    };
+  }, [
+    selectedDate,
+    getSemesterWeekNumberForDate,
+    getWeekTypeForDate,
+  ]);
+
+  const { t } = useTranslation();
+
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Расписание</h1>
-
-      <DateSelector
-        dates={weekDates}
-        selectedDate={selectedDate}
-        onDateSelect={handleDateSelect}
-        onPreviousWeek={handlePreviousWeek}
-        onNextWeek={handleNextWeek}
-      />
-
-      <DaySchedule date={selectedDate} />
-    </div>
+    <>
+      <Header title={t('navigation.schedule')}>
+        <DateSelector
+          dates={weekDates}
+          selectedDate={selectedDate}
+          onDateSelect={handleDateSelect}
+          onPreviousWeek={handlePreviousWeek}
+          onNextWeek={handleNextWeek}
+          datesWithClasses={datesWithClasses}
+        />
+      </Header>
+      <div className={styles.container}>
+        <div className={styles.weekInfoDisplay}>
+          <span className={styles.weekNumber}>
+            Week {weekInfo.number}
+          </span>
+          <span className={styles.weekType}>({weekInfo.type})</span>
+        </div>
+        <DaySchedule date={selectedDate} />
+      </div>
+    </>
   );
 };
 
