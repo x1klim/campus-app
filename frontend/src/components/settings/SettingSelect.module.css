@@ -4,7 +4,6 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  gap: 14px;
   padding: 14px 0;
   border-top: 1px solid oklch(1 0 0 / 0.15);
   font-weight: 500;
@@ -18,12 +17,17 @@
   gap: 6px;
 }
 
+.label {
+  width: 100%;
+}
+
 .select {
   appearance: none;
   background-color: transparent;
   border: none;
   outline: none;
   padding: 0;
+  padding-left: 14px;
   padding-right: 18px;
   color: var(--color-text-secondary);
 }
