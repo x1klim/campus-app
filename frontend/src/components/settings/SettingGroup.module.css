@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.name {
+  font-size: var(--text-size-small);
+  font-weight: 700;
+  color: var(--color-text-tertiary);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+}

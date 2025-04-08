@@ -14,15 +14,15 @@
     "noClasses": "🏡 No classes on this day"
   },
   "settings": {
-    "group": "Group",
-    "groupHelp": "Select your academic group",
-    "language": "Language",
-    "languageHelp": "Select your preferred language",
-    "languagePreferences": "Language Preferences",
-    "schedulePreferences": "Schedule Preferences",
-    "showingScheduleFor": "Showing schedule for subgroup",
-    "subgroup": "Subgroup",
-    "subgroupHelp": "Select your subgroup for labs and exercises"
+    "general": {
+      "title": "General",
+      "group": "Group",
+      "subgroup": "Subgroup"
+    },
+    "appearance": {
+      "title": "Appearance",
+      "language": "Language"
+    }
   },
   "subgroupInfo": "Subgroup {{subgroup}} only",
   "title": "Campus",
