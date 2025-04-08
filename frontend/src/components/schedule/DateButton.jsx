@@ -14,7 +14,10 @@ const DateButton = ({ date, isSelected, hasClasses, onClick }) => {
       onClick={handleClick}
     >
       <span className={styles.dayName}>{formatWeekday(date)}</span>
-      <span className={styles.dayNumber}>{date.getDate()}</span>
+      <div className={styles.dayNumber}>
+        <div className={styles.dot} />
+        <span>{date.getDate()}</span>
+      </div>
     </button>
   );
 };

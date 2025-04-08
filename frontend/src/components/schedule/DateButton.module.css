@@ -2,53 +2,56 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 4px;
   justify-content: center;
-  min-width: 40px;
-  height: 64px;
+  width: 100%;
+  background: transparent;
   border: none;
-  background: none;
-  border-radius: 8px;
   cursor: pointer;
-  transition: 0.2s;
-  color: #9ca3af;
-  user-select: none;
-}
-
-.dateButton:hover {
-  color: white;
-}
-
-.dateButton.selected {
-  background-color: transparent;
-  color: white;
-  position: relative;
-}
-
-.dateButton.selected::after {
-  content: '';
-  position: absolute;
-  bottom: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 8px;
-  height: 8px;
-  background-color: white;
-  border-radius: 50%;
-}
-
-.dateButton.noClasses {
-  opacity: 0.5;
 }
 
 .dayName {
-  font-size: 0.7rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  opacity: 0.6;
+  font-size: var(--text-size-tiny);
+  color: var(--color-text-secondary);
 }
 
 .dayNumber {
-  font-size: 1.5rem;
-  font-weight: 500;
-  margin-top: 4px;
+  position: relative;
+  width: 42px;
+  height: 42px;
+}
+
+.dayNumber span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text);
+  mix-blend-mode: difference;
+}
+
+.dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: transparent;
+  scale: 0;
+  transition: all 0.2s ease;
+}
+
+.dateButton.selected .dot {
+  scale: 1;
+  background: var(--color-text);
+}
+.dateButton.noClasses .dayNumber span {
+  color: var(--color-text-muted);
+}
+
+.dateButton.noClasses.selected .dayNumber span {
+  color: var(--color-text);
 }
