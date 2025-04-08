@@ -116,8 +116,8 @@ const ScheduleView = () => {
                 i18n.language === 'en'
                   ? weekInfo.type
                   : weekInfo.type === 'A'
-                  ? 'числитель'
-                  : 'знаменатель',
+                  ? 'чс.'
+                  : 'зн.',
             })}
           </span>
         </div>

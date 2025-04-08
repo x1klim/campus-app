@@ -103,19 +103,6 @@ h6 {
   -webkit-text-size-adjust: 100%;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background-color: #000;
-    --text-color: #fff;
-    --border-color: #27272a;
-    --accent-color: #4f46e5;
-    --accent-light: #a5b4fc;
-    --card-background: #111;
-    --card-highlight: #1f1f1f;
-    --text-secondary: #9ca3af;
-  }
-}
-
 a {
   color: inherit;
   text-decoration: none;
