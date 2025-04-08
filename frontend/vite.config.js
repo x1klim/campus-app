@@ -30,7 +30,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: [
-          '**/*.{js,css,html,ico,png,svg,woff2,ttf,woff,eot}',
+          '**/*.{js,css,html,ico,png,svg,woff2,woff,eot}',
         ],
 
         // Don't wait for the service worker to be active before navigation
