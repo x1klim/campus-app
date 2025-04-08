@@ -1,10 +1,11 @@
 import { useSchedule } from '../../contexts/ScheduleContext';
 import { ClassCard } from './ClassCard';
 import styles from './DaySchedule.module.css';
+import { useTranslation } from 'react-i18next';
 
 const DaySchedule = ({ date }) => {
   const { getClassesForDate, loading } = useSchedule();
-
+  const { t } = useTranslation();
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
@@ -18,19 +19,9 @@ const DaySchedule = ({ date }) => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.date}>
-        {date.toLocaleDateString('en-US', {
-          weekday: 'long',
-          month: 'long',
-          day: 'numeric',
-        })}
-      </h2>
-
       {classes.length === 0 ? (
         <div className={styles.emptyState}>
-          <p className={styles.emptyText}>
-            No classes scheduled for this day
-          </p>
+          <p>{t('schedule.noClasses')}</p>
         </div>
       ) : (
         <div className={styles.classList}>

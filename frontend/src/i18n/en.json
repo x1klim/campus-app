@@ -9,6 +9,10 @@
     "settings": "Settings",
     "today": "Today"
   },
+  "schedule": {
+    "weekInfo": "Week {{number}} ({{type}})",
+    "noClasses": "🏡 No classes on this day"
+  },
   "settings": {
     "group": "Group",
     "groupHelp": "Select your academic group",

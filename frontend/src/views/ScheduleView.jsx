@@ -5,6 +5,7 @@ import DateSelector from '../components/schedule/DateSelector';
 import DaySchedule from '../components/schedule/DaySchedule';
 import styles from './ScheduleView.module.css';
 import { useTranslation } from 'react-i18next';
+import i18n from '../i18n/config';
 
 const ScheduleView = () => {
   const {
@@ -81,7 +82,7 @@ const ScheduleView = () => {
 
   return (
     <>
-      <Header title={t('navigation.schedule')}>
+      <Header title={t('navigation.schedule')} constantBorder={true}>
         <DateSelector
           dates={weekDates}
           selectedDate={selectedDate}
@@ -92,11 +93,33 @@ const ScheduleView = () => {
         />
       </Header>
       <div className={styles.container}>
-        <div className={styles.weekInfoDisplay}>
-          <span className={styles.weekNumber}>
-            Week {weekInfo.number}
+        <div className={styles.header}>
+          <h2 className={styles.date}>
+            {(() => {
+              const dateStr = selectedDate.toLocaleDateString(
+                i18n.language,
+                {
+                  weekday: 'long',
+                  month: 'long',
+                  day: 'numeric',
+                }
+              );
+              return (
+                dateStr.charAt(0).toUpperCase() + dateStr.slice(1)
+              );
+            })()}
+          </h2>
+          <span className={styles.weekInfo}>
+            {t('schedule.weekInfo', {
+              number: weekInfo.number,
+              type:
+                i18n.language === 'en'
+                  ? weekInfo.type
+                  : weekInfo.type === 'A'
+                  ? 'числитель'
+                  : 'знаменатель',
+            })}
           </span>
-          <span className={styles.weekType}>({weekInfo.type})</span>
         </div>
         <DaySchedule date={selectedDate} />
       </div>

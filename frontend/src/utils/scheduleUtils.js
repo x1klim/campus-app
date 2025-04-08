@@ -1,51 +1,33 @@
 import i18n from '../i18n/config';
 import { transliterate as tr } from 'transliteration';
 
-/**
- * Calculates the first day of the academic semester
- * @param {Date} date - The date to determine which semester it belongs to
- * @returns {Date} - The first day of the academic semester
- */
 export const getFirstDayOfSemester = (date) => {
   const currentYear = date.getFullYear();
 
   // Determine if we're in the first or second semester
   const month = date.getMonth();
 
-  // First semester starts September 1st
-  // Second semester starts February 7th
   let firstDay;
 
   if (month >= 8) {
-    // September (8) to December
-    firstDay = new Date(currentYear, 8, 1); // September 1st
-  } else if (month >= 1 && month < 8) {
-    // February (1) to August
-    firstDay = new Date(currentYear, 1, 7); // February 7th
-  } else {
-    // January
-    // January is tricky, it's part of previous year's first semester
-    firstDay = new Date(currentYear - 1, 8, 1); // Previous year's September 1st
+    firstDay = new Date(currentYear, 8, 1);
+  } else if (month < 8) {
+    firstDay = new Date(currentYear, 1, 1);
   }
 
   // If the first day falls on weekend (6 = Saturday, 0 = Sunday), move to next Monday
   const dayOfWeek = firstDay.getDay();
   if (dayOfWeek === 6) {
     // Saturday
-    firstDay.setDate(firstDay.getDate() + 2); // Move to Monday
+    firstDay.setDate(firstDay.getDate() + 2);
   } else if (dayOfWeek === 0) {
     // Sunday
-    firstDay.setDate(firstDay.getDate() + 1); // Move to Monday
+    firstDay.setDate(firstDay.getDate() + 1);
   }
 
   return firstDay;
 };
 
-/**
- * Calculates the week number within the current semester
- * @param {Date} date - The date to calculate week number for
- * @returns {number} - Week number (1-based)
- */
 export const getSemesterWeekNumber = (date) => {
   const firstDay = getFirstDayOfSemester(date);
 
@@ -57,30 +39,15 @@ export const getSemesterWeekNumber = (date) => {
   return Math.floor(diffDays / 7) + 1;
 };
 
-/**
- * Determines if the given date is in week A or week B
- * @param {Date} date - The date to check
- * @returns {string} - 'a' or 'b'
- */
 export const getWeekTypeForDate = (date) => {
   const weekNumber = getSemesterWeekNumber(date);
   return weekNumber % 2 === 1 ? 'a' : 'b';
 };
 
-/**
- * Gets the current week type based on today's date
- * @returns {string} - 'a' or 'b'
- */
 export const getCurrentWeekType = () => {
   return getWeekTypeForDate(new Date());
 };
 
-/**
- * Checks if a specific date has any classes for the current group and subgroup
- * @param {Date} date - The date to check
- * @param {Function} getClassesForDate - Function from ScheduleContext to get classes
- * @returns {boolean} - True if there are classes on this date
- */
 export const hasClassesOnDate = (date, getClassesForDate) => {
   if (!getClassesForDate) return true; // Default to true if function not provided
 
