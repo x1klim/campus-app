@@ -55,11 +55,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile.prod
-    volumes:
-      - frontend_build:/app/dist
-    restart: unless-stopped
     networks:
       - campus_network
+    restart: unless-stopped
 
   nginx:
     container_name: campus_nginx
@@ -70,7 +68,6 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - /etc/letsencrypt:/etc/letsencrypt
-      - frontend_build:/var/www/frontend
     depends_on:
       - frontend
       - backend
@@ -86,4 +83,3 @@ networks:
 
 volumes:
   postgres_data:
-  frontend_build:
