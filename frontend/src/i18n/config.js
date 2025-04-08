@@ -4,11 +4,16 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import en from './en.json';
 import ru from './ru.json';
 
+const storedLang = localStorage.getItem('i18nextLng');
+const initialLanguage =
+  storedLang && ['en', 'ru'].includes(storedLang) ? storedLang : 'ru';
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     fallbackLng: 'ru',
+    lng: initialLanguage,
     whitelist: ['en', 'ru'],
     detection: {
       order: ['localStorage', 'navigator'],
