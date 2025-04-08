@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'robots.txt'],
+      includeAssets: ['favicon.ico', 'robots.txt'],
       manifest: {
         name: 'Campus',
         short_name: 'Campus',
@@ -29,12 +29,29 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // Cache all static files
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+
         runtimeCaching: [
           {
-            urlPattern: /\/api\/schedule/,
+            // Cache API requests for schedule
+            urlPattern: /\/api\/v1\/schedule\/.*/i,
             handler: 'StaleWhileRevalidate',
             options: {
-              cacheName: 'schedule-api',
+              cacheName: 'schedule-api-cache',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 7, // 1 week
+              },
+              backgroundSync: {
+                name: 'schedule-sync-queue',
+                options: {
+                  maxRetentionTime: 24 * 60, // Retry for up to 24 hours
+                },
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
             },
           },
         ],

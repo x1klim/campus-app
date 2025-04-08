@@ -1,0 +1,30 @@
+# Build stage
+FROM node:20-alpine AS build
+
+WORKDIR /app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy the rest of the application code
+COPY . .
+
+# Build the application
+RUN npm run build
+
+# Production stage
+FROM node:20-alpine AS production
+
+WORKDIR /app
+
+# Copy build files from build stage
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/package.json ./
+
+# We don't need to install dependencies again since the build is static
+# Just expose the directory for Nginx to serve
+
+CMD ["echo", "Frontend build ready for Nginx to serve"] 
