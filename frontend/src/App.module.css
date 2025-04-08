@@ -1,7 +1,6 @@
 .appContainer {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
   background-color: black;
   color: white;
 }
@@ -10,4 +9,5 @@
   flex: 1;
   padding: 0;
   position: relative;
+  padding-bottom: 86px;
 }

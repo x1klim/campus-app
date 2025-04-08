@@ -11,7 +11,7 @@
 
 :root {
   --color-text: oklch(1 0 0);
-  --color-text-secondary: oklch(1 0 0 / 0.8);
+  --color-text-secondary: oklch(0.85 0 0);
   --color-text-tertiary: oklch(1 0 0 / 0.6);
   --color-text-muted: oklch(1 0 0 / 0.4);
   --color-tint: oklch(0.24 0.038 285);
@@ -21,6 +21,10 @@
   --text-size-small: 14px;
   --text-size-medium: 17px;
   --text-size-large: 26px;
+}
+
+html {
+  background-color: var(--color-background);
 }
 
 * {
@@ -39,7 +43,6 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   font-size: var(--text-size-medium);
-  min-height: 100vh;
   overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -85,7 +88,6 @@ h6 {
 #root,
 #__next {
   isolation: isolate;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -99,7 +101,6 @@ h6 {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-  background-color: var(--color-background);
 }
 
 a {
