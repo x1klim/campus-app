@@ -29,12 +29,66 @@ export default defineConfig({
         ],
       },
       workbox: {
-        // Cache all static files
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        globPatterns: [
+          '**/*.{js,css,html,ico,png,svg,woff2,ttf,woff,eot}',
+        ],
+
+        // Don't wait for the service worker to be active before navigation
+        skipWaiting: true,
+        clientsClaim: true,
 
         runtimeCaching: [
+          // Fonts - cache for a very long time
           {
-            // Cache API requests for schedule
+            urlPattern: /\.(ttf|woff|woff2|eot)$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'font-cache',
+              expiration: {
+                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          // Images - use stale while revalidate
+          {
+            urlPattern: /\.(?:png|jpg|jpeg|svg|gif)$/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'image-cache',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          // Main app shell - stale while revalidate to show immediately
+          {
+            urlPattern: /\/index\.html$/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'app-shell-cache',
+            },
+          },
+          // Static assets - use stale while revalidate
+          {
+            urlPattern: /\.(?:js|css)$/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'static-resources',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 7, // 1 week
+              },
+            },
+          },
+          // API requests for schedule
+          {
             urlPattern: /\/api\/v1\/schedule\/.*/i,
             handler: 'StaleWhileRevalidate',
             options: {
