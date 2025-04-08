@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import DateButton from './DateButton';
 import styles from './DateSelector.module.css';
 
 const DateSelector = ({
@@ -7,26 +8,9 @@ const DateSelector = ({
   onDateSelect,
   onPreviousWeek,
   onNextWeek,
+  datesWithClasses = [],
 }) => {
   const scrollRef = useRef(null);
-
-  const formatDate = (date) => {
-    return date
-      .toLocaleDateString('en-US', { weekday: 'short' })
-      .substring(0, 3);
-  };
-
-  const isDateSelected = (date) => {
-    return (
-      date.getDate() === selectedDate.getDate() &&
-      date.getMonth() === selectedDate.getMonth() &&
-      date.getFullYear() === selectedDate.getFullYear()
-    );
-  };
-
-  const getFormattedDay = (date) => {
-    return date.getDate();
-  };
 
   // Calculate month and year display for current week
   const getWeekDisplay = () => {
@@ -52,29 +36,19 @@ const DateSelector = ({
     })} ${firstDate.getFullYear()}`;
   };
 
-  const getWeekType = () => {
-    // Check if dates is undefined or empty
-    if (!dates || dates.length === 0) {
-      return '';
-    }
-
-    // Simple implementation that alternates weeks
-    const weekNumber = Math.floor(
-      (dates[0].getTime() - new Date('2024-01-01').getTime()) /
-        (7 * 24 * 60 * 60 * 1000)
+  const hasClasses = (date) => {
+    return datesWithClasses.some(
+      (d) =>
+        d.getDate() === date.getDate() &&
+        d.getMonth() === date.getMonth() &&
+        d.getFullYear() === date.getFullYear()
     );
-    return weekNumber % 2 === 0 ? 'A' : 'B';
   };
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.weekInfo}>
         <span className={styles.weekPeriod}>{getWeekDisplay()}</span>
-        {getWeekType() && (
-          <span className={styles.weekType}>
-            Week {getWeekType()}
-          </span>
-        )}
       </div>
 
       <div className={styles.container}>
@@ -102,20 +76,17 @@ const DateSelector = ({
           <div className={styles.datesScroller}>
             {dates && dates.length > 0 ? (
               dates.map((date, index) => (
-                <button
+                <DateButton
                   key={index}
-                  className={`${styles.dateButton} ${
-                    isDateSelected(date) ? styles.selected : ''
-                  }`}
-                  onClick={() => onDateSelect(date)}
-                >
-                  <span className={styles.dayName}>
-                    {formatDate(date)}
-                  </span>
-                  <span className={styles.dayNumber}>
-                    {getFormattedDay(date)}
-                  </span>
-                </button>
+                  date={date}
+                  isSelected={
+                    date.getDate() === selectedDate.getDate() &&
+                    date.getMonth() === selectedDate.getMonth() &&
+                    date.getFullYear() === selectedDate.getFullYear()
+                  }
+                  hasClasses={hasClasses(date)}
+                  onClick={onDateSelect}
+                />
               ))
             ) : (
               <div className={styles.loadingDates}>

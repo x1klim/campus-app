@@ -6,6 +6,12 @@ import {
   useCallback,
   useMemo,
 } from 'react';
+import {
+  getWeekTypeForDate,
+  getCurrentWeekType,
+  getSemesterWeekNumber,
+  hasClassesOnDate,
+} from '../utils/scheduleUtils';
 
 const ScheduleContext = createContext();
 
@@ -37,16 +43,7 @@ export const ScheduleProvider = ({ children }) => {
   // Cache for week dates to improve performance
   const [weekDatesCache, setWeekDatesCache] = useState({});
 
-  // Date/Week handling
-  const getCurrentWeekType = useCallback(() => {
-    // Simple implementation that alternates weeks based on current date
-    // In a real app, this would be based on the academic calendar
-    const weekNumber = Math.floor(
-      (new Date().getTime() - new Date('2024-01-01').getTime()) /
-        (7 * 24 * 60 * 60 * 1000)
-    );
-    return weekNumber % 2 === 0 ? 'a' : 'b';
-  }, []);
+  // Date/Week handling - removing redundant functions that are now in scheduleUtils
 
   // Generate an array of dates for a given week offset from the current week
   const getCurrentWeekDates = useCallback(
@@ -87,14 +84,89 @@ export const ScheduleProvider = ({ children }) => {
     [weekDatesCache]
   );
 
-  // Determine if a date is in week A or B
-  const getWeekTypeForDate = useCallback((date) => {
-    const weekNumber = Math.floor(
-      (date.getTime() - new Date('2024-01-01').getTime()) /
-        (7 * 24 * 60 * 60 * 1000)
-    );
-    return weekNumber % 2 === 0 ? 'a' : 'b';
+  // Calculate numeric weekday (1-7 for Monday-Sunday) from a date
+  const getWeekdayNumber = useCallback((date) => {
+    const day = date.getDay();
+    return day === 0 ? 7 : day; // Convert Sunday (0) to 7
   }, []);
+
+  // Get classes for a specific date
+  const getClassesForDate = useCallback(
+    (date) => {
+      if (!schedule) return [];
+
+      const weekday = getWeekdayNumber(date);
+      const weekType = getWeekTypeForDate(date);
+
+      const day = schedule.days.find((d) => d.weekday === weekday);
+      if (!day) return [];
+
+      return day.classes.filter((class_) => {
+        // Filter by week type
+        if (
+          class_.week_type !== 'weekly' &&
+          class_.week_type !== weekType
+        ) {
+          return false;
+        }
+
+        // Filter by subgroup
+        if (
+          class_.subgroup &&
+          class_.subgroup !== parseInt(selectedSubgroup)
+        ) {
+          return false;
+        }
+
+        return true;
+      });
+    },
+    [schedule, selectedSubgroup, getWeekdayNumber]
+  );
+
+  // For compatibility with older components
+  const getClassesForDay = useCallback(
+    (weekday, weekType) => {
+      if (!schedule) return [];
+
+      const day = schedule.days.find((d) => d.weekday === weekday);
+      if (!day) return [];
+
+      return day.classes.filter((class_) => {
+        // Filter by week type
+        if (
+          class_.week_type !== 'weekly' &&
+          class_.week_type !== weekType
+        ) {
+          return false;
+        }
+
+        // Filter by subgroup
+        if (
+          class_.subgroup &&
+          class_.subgroup !== parseInt(selectedSubgroup)
+        ) {
+          return false;
+        }
+
+        return true;
+      });
+    },
+    [schedule, selectedSubgroup]
+  );
+
+  // Calculate semester week number for a date
+  const getSemesterWeekNumberForDate = useCallback((date) => {
+    return getSemesterWeekNumber(date);
+  }, []);
+
+  // Check if a date has any classes
+  const checkHasClassesOnDate = useCallback(
+    (date) => {
+      return hasClassesOnDate(date, getClassesForDate);
+    },
+    [getClassesForDate]
+  );
 
   // Persist settings to localStorage
   useEffect(() => {
@@ -146,77 +218,6 @@ export const ScheduleProvider = ({ children }) => {
     fetchSchedule();
   }, [selectedGroup, fetchSchedule]);
 
-  // Calculate numeric weekday (1-7 for Monday-Sunday) from a date
-  const getWeekdayNumber = useCallback((date) => {
-    const day = date.getDay();
-    return day === 0 ? 7 : day; // Convert Sunday (0) to 7
-  }, []);
-
-  // Get classes for a specific date
-  const getClassesForDate = useCallback(
-    (date) => {
-      if (!schedule) return [];
-
-      const weekday = getWeekdayNumber(date);
-      const weekType = getWeekTypeForDate(date);
-
-      const day = schedule.days.find((d) => d.weekday === weekday);
-      if (!day) return [];
-
-      return day.classes.filter((class_) => {
-        // Filter by week type
-        if (
-          class_.week_type !== 'weekly' &&
-          class_.week_type !== weekType
-        ) {
-          return false;
-        }
-
-        // Filter by subgroup
-        if (
-          class_.subgroup &&
-          class_.subgroup !== parseInt(selectedSubgroup)
-        ) {
-          return false;
-        }
-
-        return true;
-      });
-    },
-    [schedule, selectedSubgroup, getWeekdayNumber, getWeekTypeForDate]
-  );
-
-  // For compatibility with older components
-  const getClassesForDay = useCallback(
-    (weekday, weekType) => {
-      if (!schedule) return [];
-
-      const day = schedule.days.find((d) => d.weekday === weekday);
-      if (!day) return [];
-
-      return day.classes.filter((class_) => {
-        // Filter by week type
-        if (
-          class_.week_type !== 'weekly' &&
-          class_.week_type !== weekType
-        ) {
-          return false;
-        }
-
-        // Filter by subgroup
-        if (
-          class_.subgroup &&
-          class_.subgroup !== parseInt(selectedSubgroup)
-        ) {
-          return false;
-        }
-
-        return true;
-      });
-    },
-    [schedule, selectedSubgroup]
-  );
-
   // Expose the API for components
   const value = useMemo(
     () => ({
@@ -233,10 +234,12 @@ export const ScheduleProvider = ({ children }) => {
       getCurrentWeekType,
       getCurrentWeekDates,
       getWeekTypeForDate,
+      getSemesterWeekNumberForDate,
 
       // Data access
       getClassesForDate,
       getClassesForDay,
+      checkHasClassesOnDate,
 
       // Actions
       refetchSchedule: fetchSchedule,
@@ -249,12 +252,12 @@ export const ScheduleProvider = ({ children }) => {
       setSelectedGroup,
       selectedSubgroup,
       setSelectedSubgroup,
-      getCurrentWeekType,
       getCurrentWeekDates,
-      getWeekTypeForDate,
       getClassesForDate,
       getClassesForDay,
       fetchSchedule,
+      getSemesterWeekNumberForDate,
+      checkHasClassesOnDate,
     ]
   );
 

@@ -92,6 +92,10 @@
   border-radius: 50%;
 }
 
+.dateButton.noClasses {
+  opacity: 0.5;
+}
+
 .dayName {
   font-size: 0.7rem;
   font-weight: 500;
