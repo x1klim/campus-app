@@ -27,7 +27,8 @@
 .subjectName {
   color: var(--color-text);
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.25;
+  text-wrap: pretty;
 }
 
 .subgroupInfo {
