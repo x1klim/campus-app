@@ -10,7 +10,12 @@ docker-compose.override.yml
 
 # Environment
 .env
+.env.prod
 frontend/.env.*
+
+# Production
+nginx/ssl/
+backup.sql
 
 # Legal
 frontend/public/fonts/
