@@ -36,13 +36,7 @@
   color: var(--color-text-muted);
   font-size: var(--text-size-small);
   font-weight: 600;
-  height: 0px;
   overflow: hidden;
-  transition: all 0.2s ease;
-}
-
-.subgroupInfoExpanded {
-  height: auto;
 }
 
 .mainInfoTrailing {
@@ -72,19 +66,7 @@
   background-color: #626262;
   mix-blend-mode: color-dodge;
   overflow: hidden;
-  height: 0px;
   width: 100%;
-  transform: scale(0.8);
-  opacity: 0;
-  margin-top: 0px;
-  transition: all 0.2s ease;
-}
-
-.detailsExpanded {
-  transform: scale(1);
-  margin-top: 5px;
-  opacity: 1;
-  height: auto;
 }
 
 .detailsLeading {
