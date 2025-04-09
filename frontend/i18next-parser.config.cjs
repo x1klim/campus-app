@@ -5,6 +5,7 @@ module.exports = {
   namespaceSeparator: ':',
   output: 'src/i18n/$LOCALE.json',
   input: ['src/**/*.{js,jsx}'],
-  keepRemoved: false,
+  keepRemoved: true,
+  createOldCatalogs: false,
   sort: true,
 };
