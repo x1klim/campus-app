@@ -63,12 +63,12 @@ function InstallPWAView() {
           </ol>
         </div>
 
-        <button
+        {/* <button
           className={styles.continueButton}
           onClick={handleBypassPrompt}
         >
           {t('install.continue')}
-        </button>
+        </button> */}
       </div>
     </>
   );

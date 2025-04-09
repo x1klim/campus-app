@@ -14,7 +14,7 @@
 
 .container {
   z-index: 10;
-  padding: 22px;
+  padding: 18px;
   margin-top: -120px;
   color: var(--color-text);
 }
@@ -40,7 +40,7 @@
 
 .instructions ol {
   list-style-position: outside;
-  padding-left: 1.25rem;
+  padding-left: 1.3rem;
   margin: 0;
 }
 
