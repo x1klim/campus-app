@@ -21,6 +21,8 @@ const ScheduleView = () => {
     return getCurrentWeekDates(0);
   });
 
+  const { t } = useTranslation();
+
   // Update week dates when the week offset changes
   useEffect(() => {
     const newDates = getCurrentWeekDates(weekOffset);
@@ -78,7 +80,28 @@ const ScheduleView = () => {
     getWeekTypeForDate,
   ]);
 
-  const { t } = useTranslation();
+  // Format the selected date
+  const formattedDate = useMemo(() => {
+    const dateStr = selectedDate.toLocaleDateString(i18n.language, {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+    });
+    return dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+  }, [selectedDate]);
+
+  // Format the week info
+  const formattedWeekInfo = useMemo(() => {
+    return t('schedule.weekInfo', {
+      number: weekInfo.number,
+      type:
+        i18n.language === 'en'
+          ? weekInfo.type
+          : weekInfo.type === 'A'
+          ? 'чс.'
+          : 'зн.',
+    });
+  }, [weekInfo, t]);
 
   return (
     <>
@@ -94,32 +117,8 @@ const ScheduleView = () => {
       </Header>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h2 className={styles.date}>
-            {(() => {
-              const dateStr = selectedDate.toLocaleDateString(
-                i18n.language,
-                {
-                  weekday: 'long',
-                  month: 'long',
-                  day: 'numeric',
-                }
-              );
-              return (
-                dateStr.charAt(0).toUpperCase() + dateStr.slice(1)
-              );
-            })()}
-          </h2>
-          <span className={styles.weekInfo}>
-            {t('schedule.weekInfo', {
-              number: weekInfo.number,
-              type:
-                i18n.language === 'en'
-                  ? weekInfo.type
-                  : weekInfo.type === 'A'
-                  ? 'чс.'
-                  : 'зн.',
-            })}
-          </span>
+          <h2 className={styles.date}>{formattedDate}</h2>
+          <span className={styles.weekInfo}>{formattedWeekInfo}</span>
         </div>
         <DaySchedule date={selectedDate} />
       </div>

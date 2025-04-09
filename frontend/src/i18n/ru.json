@@ -21,7 +21,9 @@
     },
     "appearance": {
       "title": "Интерфейс",
-      "language": "Язык"
+      "language": "Язык",
+      "useShortSubjectNames": "Упрощённые названия",
+      "useShortSubjectNamesDescription": "Показывать упрощённые названия предметов вместо полных"
     }
   },
   "subgroupInfo": "Только у {{subgroup}} подгруппы",

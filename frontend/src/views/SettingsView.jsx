@@ -1,10 +1,16 @@
 import { useSchedule } from '../contexts/ScheduleContext';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 import i18n from '../i18n/config';
 import styles from './SettingsView.module.css';
 import Header from '../components/navigation/Header';
 import SettingGroup from '../components/settings/SettingGroup';
 import SettingSelect from '../components/settings/SettingSelect';
+import SettingToggle from '../components/settings/SettingToggle';
+import {
+  getUseShortSubjectNames,
+  setUseShortSubjectNames,
+} from '../utils/scheduleUtils';
 
 const SettingsView = () => {
   const {
@@ -14,6 +20,9 @@ const SettingsView = () => {
     setSelectedSubgroup,
   } = useSchedule();
   const { t } = useTranslation();
+  const [useShortSubjectNames, setUseShortNames] = useState(
+    getUseShortSubjectNames()
+  );
 
   const handleGroupChange = (e) => {
     setSelectedGroup(e.target.value);
@@ -25,6 +34,12 @@ const SettingsView = () => {
 
   const handleLanguageChange = (e) => {
     i18n.changeLanguage(e.target.value);
+  };
+
+  const handleToggleShortNames = () => {
+    const newValue = !useShortSubjectNames;
+    setUseShortNames(newValue);
+    setUseShortSubjectNames(newValue);
   };
 
   return (
@@ -58,6 +73,16 @@ const SettingsView = () => {
               { value: 'en', label: '🇺🇸' },
             ]}
           />
+          {i18n.language === 'ru' && (
+            <SettingToggle
+              label={t('settings.appearance.useShortSubjectNames')}
+              description={t(
+                'settings.appearance.useShortSubjectNamesDescription'
+              )}
+              value={useShortSubjectNames}
+              onChange={handleToggleShortNames}
+            />
+          )}
         </SettingGroup>
       </div>
     </>

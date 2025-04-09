@@ -139,6 +139,24 @@ export const formatTeacherName = (teacher) => {
   return '';
 };
 
+export const getUseShortSubjectNames = () => {
+  const preference = localStorage.getItem('useShortSubjectNames');
+  if (!preference)
+    localStorage.setItem('useShortSubjectNames', 'true');
+  return preference === 'true';
+};
+
+export const setUseShortSubjectNames = (value) => {
+  localStorage.setItem('useShortSubjectNames', value.toString());
+};
+
+export const toggleUseShortSubjectNames = () => {
+  const currentValue = getUseShortSubjectNames();
+  const newValue = !currentValue;
+  setUseShortSubjectNames(newValue);
+  return newValue;
+};
+
 export const formatSubjectName = (subject) => {
   if (!subject) return '';
 
@@ -146,7 +164,8 @@ export const formatSubjectName = (subject) => {
     return subject.english_name;
   }
 
-  if (subject.short_name) {
+  // Only use short_name if the user preference is enabled
+  if (subject.short_name && getUseShortSubjectNames()) {
     return subject.short_name;
   }
 

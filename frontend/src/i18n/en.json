@@ -21,7 +21,9 @@
     },
     "appearance": {
       "title": "Appearance",
-      "language": "Language"
+      "language": "Language",
+      "useShortSubjectNames": "Simplified names",
+      "useShortSubjectNamesDescription": "Show simplified subject names instead of the official ones"
     }
   },
   "subgroupInfo": "Subgroup {{subgroup}} only",
