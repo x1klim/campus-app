@@ -5,3 +5,13 @@
   margin: 0 auto;
   padding: 32px 22px;
 }
+
+.copyright {
+  position: absolute;
+  bottom: 100px;
+  left: 0;
+  right: 0;
+  font-size: var(--text-size-small);
+  color: var(--color-text-muted);
+  text-align: center;
+}

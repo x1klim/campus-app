@@ -4,6 +4,25 @@
     "lecture": "Lecture",
     "seminar": "Seminar"
   },
+  "install": {
+    "android": {
+      "step1": "Tap the menu icon (⋮) in Chrome",
+      "step2": "Tap \"Add to Home screen\"",
+      "step3": "Tap \"Add\" when prompted"
+    },
+    "continue": "Continue in Browser",
+    "description": "Install Campus now and test all new features",
+    "desktop": {
+      "step1": "Click the install icon in your browser's address bar",
+      "step2": "Follow the on-screen instructions"
+    },
+    "ios": {
+      "step1": "Tap the Share icon in Safari",
+      "step2": "Scroll down and tap \"Add to Home Screen\"",
+      "step3": "Tap \"Add\" in the top right corner"
+    },
+    "title": "Campus Beta"
+  },
   "navigation": {
     "schedule": "Schedule",
     "settings": "Settings",
@@ -27,6 +46,25 @@
     }
   },
   "subgroupInfo": "Subgroup {{subgroup}} only",
+  "timeSlots": {
+    "custom": {
+      "lateStart": "Classes start at {{startTime}}",
+      "todayStart": "Today's classes start at {{startTime}}"
+    },
+    "lateStart": {
+      "en": "Classes start at {{startTime}}"
+    },
+    "names": {
+      "1": "First Period",
+      "2": "Second Period",
+      "3": "Third Period",
+      "4": "Fourth Period",
+      "5": "Fifth Period"
+    },
+    "todayStart": {
+      "en": "Today's classes start at {{startTime}}"
+    }
+  },
   "title": "Campus",
   "weekdays": {
     "short": {
@@ -37,25 +75,6 @@
       "4": "T",
       "5": "F",
       "6": "S"
-    }
-  },
-  "timeSlots": {
-    "lateStart": {
-      "en": "Classes start at {{startTime}}"
-    },
-    "todayStart": {
-      "en": "Today's classes start at {{startTime}}"
-    },
-    "custom": {
-      "lateStart": "Classes start at {{startTime}}",
-      "todayStart": "Today's classes start at {{startTime}}"
-    },
-    "names": {
-      "1": "First Period",
-      "2": "Second Period",
-      "3": "Third Period",
-      "4": "Fourth Period",
-      "5": "Fifth Period"
     }
   }
 }

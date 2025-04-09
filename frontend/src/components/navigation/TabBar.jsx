@@ -1,10 +1,14 @@
 import styles from './TabBar.module.css';
 import { useTranslation } from 'react-i18next';
 
-const TabBar = ({ activeTab, setActiveTab }) => {
+const TabBar = ({
+  activeTab,
+  setActiveTab,
+  hideTodayTab = false,
+}) => {
   const { t } = useTranslation();
 
-  const tabs = [
+  const allTabs = [
     {
       id: 'today',
       label: t('navigation.today'),
@@ -21,6 +25,11 @@ const TabBar = ({ activeTab, setActiveTab }) => {
       icon: '􀍟',
     },
   ];
+
+  // Filter out the Today tab if hideTodayTab is true
+  const tabs = allTabs.filter(
+    (tab) => !hideTodayTab || tab.id !== 'today'
+  );
 
   return (
     <nav className={styles.tabBar}>

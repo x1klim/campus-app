@@ -1,6 +1,6 @@
 import { useSchedule } from '../contexts/ScheduleContext';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import i18n from '../i18n/config';
 import styles from './SettingsView.module.css';
 import Header from '../components/navigation/Header';
@@ -11,6 +11,7 @@ import {
   getUseShortSubjectNames,
   setUseShortSubjectNames,
 } from '../utils/scheduleUtils';
+import { toggleBetaFeature } from '../utils/betaFeatures';
 
 const SettingsView = () => {
   const {
@@ -23,6 +24,49 @@ const SettingsView = () => {
   const [useShortSubjectNames, setUseShortNames] = useState(
     getUseShortSubjectNames()
   );
+
+  // Beta features secret toggle
+  const [clickCount, setClickCount] = useState(0);
+  const clickTimerRef = useRef(null);
+
+  useEffect(() => {
+    // Reset click count after 3 seconds of inactivity
+    return () => {
+      if (clickTimerRef.current) {
+        clearTimeout(clickTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleBetaClick = () => {
+    // Clear any existing timer
+    if (clickTimerRef.current) {
+      clearTimeout(clickTimerRef.current);
+    }
+
+    // Increment click count
+    const newCount = clickCount + 1;
+    setClickCount(newCount);
+
+    // If we reach 10 clicks, disable beta features
+    if (newCount >= 10) {
+      // Disable the hideTodayTab beta feature
+      toggleBetaFeature('hideTodayTab', false);
+      setClickCount(0);
+
+      // Optional: Show a brief notification or feedback
+      alert('Beta features disabled! Today tab is now available.');
+
+      // Reload to apply changes
+      window.location.reload();
+    } else {
+      // Set a timer to reset click count after 3 seconds of inactivity
+      clickTimerRef.current = setTimeout(() => {
+        setClickCount(0);
+      }, 3000);
+    }
+  };
+  // End of beta features secret toggle
 
   const handleGroupChange = (e) => {
     setSelectedGroup(e.target.value);
@@ -84,6 +128,13 @@ const SettingsView = () => {
             />
           )}
         </SettingGroup>
+        <span
+          className={styles.copyright}
+          onClick={handleBetaClick}
+          style={{ cursor: 'pointer' }}
+        >
+          // campus_beta
+        </span>
       </div>
     </>
   );
