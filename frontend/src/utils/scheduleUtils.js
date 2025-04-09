@@ -3,39 +3,45 @@ import { transliterate as tr } from 'transliteration';
 
 export const getFirstDayOfSemester = (date) => {
   const currentYear = date.getFullYear();
-
-  // Determine if we're in the first or second semester
   const month = date.getMonth();
 
-  let firstDay;
+  // Determine semester start date (Sep 1 or Feb 7)
+  const semesterStartDate =
+    month >= 8
+      ? new Date(currentYear, 8, 1) // First semester (Sep)
+      : new Date(currentYear, 1, 7); // Second semester (Feb)
 
-  if (month >= 8) {
-    firstDay = new Date(currentYear, 8, 1);
-  } else if (month < 8) {
-    firstDay = new Date(currentYear, 1, 1);
-  }
+  // Find Monday of the week containing the semester start date
+  const dayOfWeek = semesterStartDate.getDay();
+  const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+  semesterStartDate.setDate(
+    semesterStartDate.getDate() - daysToSubtract
+  );
 
-  // If the first day falls on weekend (6 = Saturday, 0 = Sunday), move to next Monday
-  const dayOfWeek = firstDay.getDay();
-  if (dayOfWeek === 6) {
-    // Saturday
-    firstDay.setDate(firstDay.getDate() + 2);
-  } else if (dayOfWeek === 0) {
-    // Sunday
-    firstDay.setDate(firstDay.getDate() + 1);
-  }
-
-  return firstDay;
+  return semesterStartDate;
 };
 
 export const getSemesterWeekNumber = (date) => {
   const firstDay = getFirstDayOfSemester(date);
 
-  // Calculate the difference in days
-  const diffTime = Math.abs(date - firstDay);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  // Normalize dates to start of day
+  const targetDate = new Date(date);
+  targetDate.setHours(0, 0, 0, 0);
+  firstDay.setHours(0, 0, 0, 0);
 
-  // Calculate week number (1-based)
+  // Find Monday of current week
+  const currentWeekMonday = new Date(targetDate);
+  const currentDayOfWeek = currentWeekMonday.getDay();
+  const mondayOffset =
+    currentDayOfWeek === 0 ? -6 : 1 - currentDayOfWeek;
+  currentWeekMonday.setDate(
+    currentWeekMonday.getDate() + mondayOffset
+  );
+
+  // Calculate weeks between semester start and current week
+  const diffDays = Math.round(
+    (currentWeekMonday - firstDay) / (1000 * 60 * 60 * 24)
+  );
   return Math.floor(diffDays / 7) + 1;
 };
 
