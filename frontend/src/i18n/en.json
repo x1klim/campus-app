@@ -10,20 +10,20 @@
     "today": "Today"
   },
   "schedule": {
-    "weekInfo": "Week {{number}} ({{type}})",
-    "noClasses": "🏡 No classes on this day"
+    "noClasses": "No classes on this day",
+    "weekInfo": "Week {{number}} ({{type}})"
   },
   "settings": {
-    "general": {
-      "title": "General",
-      "group": "Group",
-      "subgroup": "Subgroup"
-    },
     "appearance": {
-      "title": "Appearance",
       "language": "Language",
+      "title": "Appearance",
       "useShortSubjectNames": "Simplified names",
       "useShortSubjectNamesDescription": "Show simplified subject names instead of the official ones"
+    },
+    "general": {
+      "group": "Group",
+      "subgroup": "Subgroup",
+      "title": "General"
     }
   },
   "subgroupInfo": "Subgroup {{subgroup}} only",
@@ -37,6 +37,25 @@
       "4": "T",
       "5": "F",
       "6": "S"
+    }
+  },
+  "timeSlots": {
+    "lateStart": {
+      "en": "Classes start at {{startTime}}"
+    },
+    "todayStart": {
+      "en": "Today's classes start at {{startTime}}"
+    },
+    "custom": {
+      "lateStart": "Classes start at {{startTime}}",
+      "todayStart": "Today's classes start at {{startTime}}"
+    },
+    "names": {
+      "1": "First Period",
+      "2": "Second Period",
+      "3": "Third Period",
+      "4": "Fourth Period",
+      "5": "Fifth Period"
     }
   }
 }

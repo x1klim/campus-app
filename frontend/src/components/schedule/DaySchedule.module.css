@@ -4,14 +4,19 @@
   gap: 12px;
 }
 
-.emptyState {
+.hint {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 48px 22px;
+  padding: 22px;
+  padding-top: 6px;
   text-align: center;
-  color: oklch(0.6 0 0);
+  color: var(--color-text-tertiary);
+}
+
+.hint.emptyState {
+  padding-top: 22px;
 }
 
 .loadingContainer {
