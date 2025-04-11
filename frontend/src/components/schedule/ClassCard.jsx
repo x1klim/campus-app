@@ -1,4 +1,4 @@
-import { useState, memo } from 'react';
+import { useState, memo, useEffect, useRef } from 'react';
 import * as Motion from 'motion/react';
 import {
   getClassTypeLabel,
@@ -171,6 +171,26 @@ const ClassDetails = memo(({ classItem }) => {
 const TimeSlotDisplay = memo(({ timeSlot }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasChanged, setHasChanged] = useState(false);
+  const timeoutRef = useRef(null);
+
+  // Auto-collapse
+  const COLLAPSE_DELAY = 3000;
+
+  useEffect(() => {
+    if (isExpanded) {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => {
+        setIsExpanded(false);
+      }, COLLAPSE_DELAY);
+    }
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [isExpanded]);
 
   const handleTimeClick = (e) => {
     e.stopPropagation(); // Prevent card from expanding when clicking time
