@@ -226,9 +226,9 @@ export const formatTimeSlot = (timeSlot, expanded = false) => {
         return `${hours}:${minutes}`;
       };
 
-      return `${formatRussianTime(
+      return `с ${formatRussianTime(
         timeSlot.start_time
-      )}<br />${formatRussianTime(timeSlot.end_time)}`;
+      )}<br />по ${formatRussianTime(timeSlot.end_time)}`;
     }
   } else {
     // Collapsed view
