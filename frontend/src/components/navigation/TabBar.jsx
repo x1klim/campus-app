@@ -5,11 +5,11 @@ const TabBar = ({ activeTab, setActiveTab }) => {
   const { t } = useTranslation();
 
   const tabs = [
-    {
-      id: 'today',
-      label: t('navigation.today'),
-      icon: '􀎟',
-    },
+    // {
+    //   id: 'today',
+    //   label: t('navigation.today'),
+    //   icon: '􀎟',
+    // },
     {
       id: 'schedule',
       label: t('navigation.schedule'),
