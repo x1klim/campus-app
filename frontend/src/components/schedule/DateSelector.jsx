@@ -5,8 +5,8 @@ const DateSelector = ({
   dates,
   selectedDate,
   onDateSelect,
-  onPreviousWeek,
-  onNextWeek,
+  // onPreviousWeek,
+  // onNextWeek,
   datesWithClasses = [],
 }) => {
   const hasClasses = (date) => {
@@ -20,12 +20,6 @@ const DateSelector = ({
 
   return (
     <div className={styles.container}>
-      <button
-        className={styles.chevronButton}
-        onClick={onPreviousWeek}
-      >
-        􀆉
-      </button>
       {dates && dates.length > 0 ? (
         dates.map((date, index) => (
           <DateButton
@@ -43,9 +37,6 @@ const DateSelector = ({
       ) : (
         <div className={styles.loadingDates}>Loading dates...</div>
       )}
-      <button className={styles.chevronButton} onClick={onNextWeek}>
-        􀆊
-      </button>
     </div>
   );
 };
