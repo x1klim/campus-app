@@ -3,12 +3,12 @@
   flex-direction: column;
   gap: 24px;
   margin: 0 auto;
-  padding: 32px 22px;
+  padding: 22px;
 }
 
 .copyright {
   position: absolute;
-  bottom: 100px;
+  bottom: 120px;
   left: 0;
   right: 0;
   font-size: var(--text-size-small);

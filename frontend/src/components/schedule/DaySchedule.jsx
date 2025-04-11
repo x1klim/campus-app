@@ -11,7 +11,6 @@ const DaySchedule = ({ date }) => {
     return (
       <div className={styles.loadingContainer}>
         <div className={styles.spinner}></div>
-        <p className={styles.loadingText}>Loading schedule...</p>
       </div>
     );
   }
