@@ -1,4 +1,4 @@
-import { useState, memo, useEffect } from 'react';
+import { useState, memo, useEffect, useRef } from 'react';
 import * as Motion from 'motion/react';
 import {
   getClassTypeLabel,
@@ -169,18 +169,16 @@ const ClassDetails = memo(({ classItem }) => {
 
 // Time slot component
 const TimeSlotDisplay = memo(({ timeSlot, isExpanded }) => {
-  const [hasRendered, setHasRendered] = useState(false);
+  const hasRenderedRef = useRef(false);
 
   // Set hasRendered to true after first render
   useEffect(() => {
-    if (!hasRendered) {
-      setHasRendered(true);
-    }
+    hasRenderedRef.current = true;
   }, []);
 
   // Only animate transitions after first render
   const getInitialState = () => {
-    if (!hasRendered) {
+    if (!hasRenderedRef.current) {
       return isExpanded ? 'animate' : 'animate';
     }
     return 'initial';
