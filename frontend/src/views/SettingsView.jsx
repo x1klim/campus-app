@@ -85,7 +85,7 @@ const SettingsView = () => {
           )}
         </SettingGroup>
         <span className={styles.copyright}>
-          Разработал Клим Коровкин
+          {t('settings.general.copyright')}
         </span>
       </div>
     </>

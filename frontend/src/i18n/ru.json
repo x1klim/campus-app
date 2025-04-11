@@ -40,6 +40,7 @@
       "useShortSubjectNamesDescription": "Показывать упрощённые названия предметов вместо полных"
     },
     "general": {
+      "copyright": "Разработал Клим Коровкин",
       "group": "Группа",
       "subgroup": "Подгруппа",
       "title": "Общие"

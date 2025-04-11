@@ -40,6 +40,7 @@
       "useShortSubjectNamesDescription": "Show simplified subject names instead of the official ones"
     },
     "general": {
+      "copyright": "Developed by Klim Korovkin",
       "group": "Group",
       "subgroup": "Subgroup",
       "title": "General"
