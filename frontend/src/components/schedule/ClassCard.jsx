@@ -1,4 +1,4 @@
-import { useState, memo, useEffect, useRef } from 'react';
+import { useState, memo, useEffect } from 'react';
 import * as Motion from 'motion/react';
 import {
   getClassTypeLabel,
@@ -168,76 +168,57 @@ const ClassDetails = memo(({ classItem }) => {
 });
 
 // Time slot component
-const TimeSlotDisplay = memo(({ timeSlot }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [hasChanged, setHasChanged] = useState(false);
-  const timeoutRef = useRef(null);
+const TimeSlotDisplay = memo(({ timeSlot, isExpanded }) => {
+  const [hasRendered, setHasRendered] = useState(false);
 
-  // Auto-collapse
-  const COLLAPSE_DELAY = 3000;
-
+  // Set hasRendered to true after first render
   useEffect(() => {
-    if (isExpanded) {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      timeoutRef.current = setTimeout(() => {
-        setIsExpanded(false);
-      }, COLLAPSE_DELAY);
+    if (!hasRendered) {
+      setHasRendered(true);
     }
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [isExpanded]);
+  }, []);
 
-  const handleTimeClick = (e) => {
-    e.stopPropagation(); // Prevent card from expanding when clicking time
-    setIsExpanded((prev) => !prev);
-    setHasChanged(true);
+  // Only animate transitions after first render
+  const getInitialState = () => {
+    if (!hasRendered) {
+      return isExpanded ? 'animate' : 'animate';
+    }
+    return 'initial';
   };
 
   return (
     <Motion.motion.div
-      onClick={handleTimeClick}
       className={styles.timeSlotContainer}
       animate={isExpanded ? 'expanded' : 'collapsed'}
       variants={timeSlotContainerVariants}
       initial="collapsed"
     >
-      {hasChanged ? (
-        <Motion.AnimatePresence mode="wait">
-          {isExpanded ? (
-            <Motion.motion.span
-              key="expanded-time"
-              className={styles.timeSlot}
-              variants={timeSlotVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              dangerouslySetInnerHTML={{
-                __html: formatTimeSlot(timeSlot, true),
-              }}
-            />
-          ) : (
-            <Motion.motion.span
-              key="collapsed-time"
-              className={styles.timeSlot}
-              variants={timeSlotVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-            >
-              {formatTimeSlot(timeSlot)}
-            </Motion.motion.span>
-          )}
-        </Motion.AnimatePresence>
-      ) : (
-        <span className={styles.timeSlot}>
-          {formatTimeSlot(timeSlot)}
-        </span>
-      )}
+      <Motion.AnimatePresence mode="wait">
+        {isExpanded ? (
+          <Motion.motion.span
+            key="expanded-time"
+            className={styles.timeSlot}
+            variants={timeSlotVariants}
+            initial={getInitialState()}
+            animate="animate"
+            exit="exit"
+            dangerouslySetInnerHTML={{
+              __html: formatTimeSlot(timeSlot, true),
+            }}
+          />
+        ) : (
+          <Motion.motion.span
+            key="collapsed-time"
+            className={styles.timeSlot}
+            variants={timeSlotVariants}
+            initial={getInitialState()}
+            animate="animate"
+            exit="exit"
+          >
+            {formatTimeSlot(timeSlot)}
+          </Motion.motion.span>
+        )}
+      </Motion.AnimatePresence>
     </Motion.motion.div>
   );
 });
@@ -277,7 +258,10 @@ export const ClassCard = memo(
             </Motion.AnimatePresence>
           </div>
           <div className={styles.mainInfoTrailing}>
-            <TimeSlotDisplay timeSlot={classItem.time_slot} />
+            <TimeSlotDisplay
+              timeSlot={classItem.time_slot}
+              isExpanded={isExpanded}
+            />
             <Motion.motion.span
               className={styles.expandIcon}
               variants={expandIconVariants}

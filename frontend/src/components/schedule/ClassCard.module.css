@@ -66,6 +66,7 @@
   display: block;
   font-variant-numeric: tabular-nums;
   font-feature-settings: 'tnum';
+  min-width: 7ch;
 }
 
 /* Details */
