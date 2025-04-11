@@ -21,9 +21,9 @@ const expandIconVariants = {
 };
 
 const expandIconTransition = {
-  duration: 0.3,
+  duration: 0.2,
   type: 'spring',
-  bounce: 0.3,
+  bounce: 0.2,
 };
 
 const subgroupInfoVariants = {
@@ -51,6 +51,41 @@ const subgroupInfoVariants = {
       height: { duration: 0.2 },
       opacity: { duration: 0.15 },
       filter: { duration: 0.15 },
+    },
+  },
+};
+
+const timeSlotVariants = {
+  initial: { opacity: 0, filter: 'blur(5px)' },
+  animate: {
+    opacity: 1,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 0.15,
+    },
+  },
+  exit: {
+    opacity: 0,
+    filter: 'blur(5px)',
+    transition: {
+      duration: 0.1,
+    },
+  },
+};
+
+const timeSlotContainerVariants = {
+  collapsed: {
+    height: '1.15em',
+    transition: {
+      duration: 0.15,
+      ease: 'easeOut',
+    },
+  },
+  expanded: {
+    height: '2.4em',
+    transition: {
+      duration: 0.15,
+      ease: 'easeOut',
     },
   },
 };
@@ -132,13 +167,70 @@ const ClassDetails = memo(({ classItem }) => {
   );
 });
 
+// Time slot component
+const TimeSlotDisplay = memo(({ timeSlot }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [hasChanged, setHasChanged] = useState(false);
+
+  const handleTimeClick = (e) => {
+    e.stopPropagation(); // Prevent card from expanding when clicking time
+    setIsExpanded((prev) => !prev);
+    setHasChanged(true);
+  };
+
+  return (
+    <Motion.motion.div
+      onClick={handleTimeClick}
+      className={styles.timeSlotContainer}
+      animate={isExpanded ? 'expanded' : 'collapsed'}
+      variants={timeSlotContainerVariants}
+      initial="collapsed"
+    >
+      {hasChanged ? (
+        <Motion.AnimatePresence mode="wait">
+          {isExpanded ? (
+            <Motion.motion.span
+              key="expanded-time"
+              className={styles.timeSlot}
+              variants={timeSlotVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              dangerouslySetInnerHTML={{
+                __html: formatTimeSlot(timeSlot, true),
+              }}
+            />
+          ) : (
+            <Motion.motion.span
+              key="collapsed-time"
+              className={styles.timeSlot}
+              variants={timeSlotVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+            >
+              {formatTimeSlot(timeSlot)}
+            </Motion.motion.span>
+          )}
+        </Motion.AnimatePresence>
+      ) : (
+        <span className={styles.timeSlot}>
+          {formatTimeSlot(timeSlot)}
+        </span>
+      )}
+    </Motion.motion.div>
+  );
+});
+
 // Main component
 export const ClassCard = memo(
   ({ classItem, preExpanded = false }) => {
     const [isExpanded, setIsExpanded] = useState(preExpanded);
     const { t } = useTranslation();
 
-    const toggleExpanded = () => setIsExpanded((prev) => !prev);
+    const toggleExpanded = () => {
+      setIsExpanded((prev) => !prev);
+    };
 
     const hasSubgroup = Boolean(classItem.subgroup);
 
@@ -165,9 +257,7 @@ export const ClassCard = memo(
             </Motion.AnimatePresence>
           </div>
           <div className={styles.mainInfoTrailing}>
-            <span className={styles.timeSlot}>
-              {formatTimeSlot(classItem.time_slot)}
-            </span>
+            <TimeSlotDisplay timeSlot={classItem.time_slot} />
             <Motion.motion.span
               className={styles.expandIcon}
               variants={expandIconVariants}

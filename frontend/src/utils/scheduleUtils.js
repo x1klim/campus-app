@@ -195,23 +195,57 @@ export const formatLocation = (location) => {
   return location;
 };
 
-export const formatTimeSlot = (timeSlot) => {
+export const formatTimeSlot = (timeSlot, expanded = false) => {
   if (!timeSlot) return '';
-
-  if (i18n.language === 'en' && timeSlot.start_time) {
-    const [hours, minutes] = timeSlot.start_time.split(':');
-    const date = new Date();
-    date.setHours(parseInt(hours, 10));
-    date.setMinutes(parseInt(minutes, 10));
-
-    return date.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: minutes === '00' ? undefined : '2-digit',
-      hour12: true,
-    });
+  if (!timeSlot.start_time || !timeSlot.end_time) {
+    return timeSlot.name || '';
   }
 
-  return timeSlot.name;
+  if (expanded) {
+    // Expanded view
+    if (i18n.language === 'en') {
+      const formatTime = (timeString) => {
+        const [hours, minutes] = timeString.split(':');
+        const date = new Date();
+        date.setHours(parseInt(hours, 10));
+        date.setMinutes(parseInt(minutes, 10));
+
+        return date.toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          minute: minutes === '00' ? undefined : '2-digit',
+          hour12: true,
+        });
+      };
+
+      return `${formatTime(timeSlot.start_time)}<br />${formatTime(
+        timeSlot.end_time
+      )}`;
+    } else {
+      const formatRussianTime = (timeString) => {
+        const [hours, minutes] = timeString.split(':');
+        return `${hours}:${minutes}`;
+      };
+
+      return `${formatRussianTime(
+        timeSlot.start_time
+      )}<br />${formatRussianTime(timeSlot.end_time)}`;
+    }
+  } else {
+    // Collapsed view
+    if (i18n.language === 'en' && timeSlot.start_time) {
+      const [hours, minutes] = timeSlot.start_time.split(':');
+      const date = new Date();
+      date.setHours(parseInt(hours, 10));
+      date.setMinutes(parseInt(minutes, 10));
+
+      return date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: minutes === '00' ? undefined : '2-digit',
+        hour12: true,
+      });
+    }
+    return timeSlot.name;
+  }
 };
 
 /**

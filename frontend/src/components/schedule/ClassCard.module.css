@@ -29,7 +29,7 @@
   color: var(--color-text);
   font-weight: 600;
   line-height: 1.25;
-  text-wrap: pretty;
+  text-wrap: balance;
 }
 
 .subgroupInfo {
@@ -49,9 +49,23 @@
   mix-blend-mode: color-dodge;
 }
 
+.timeSlotContainer {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  will-change: height;
+}
+
 .timeSlot {
   white-space: nowrap;
   font-size: var(--text-size-small);
+  text-align: right;
+  line-height: 1.15;
+  display: block;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
 }
 
 /* Details */
