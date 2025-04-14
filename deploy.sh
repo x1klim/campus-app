@@ -4,6 +4,16 @@ set -e
 # Ensure we're in the project root
 cd "$(dirname "$0")"
 
+# Parse command line arguments
+RUN_MIGRATIONS=false
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --with-migrations) RUN_MIGRATIONS=true ;;
+        *) echo "Unknown parameter: $1"; exit 1 ;;
+    esac
+    shift
+done
+
 # Check if .env.prod exists
 if [ ! -f ".env.prod" ]; then
     echo "Error: .env.prod file not found!"
@@ -37,6 +47,13 @@ echo "Starting deployment..."
 docker compose -f docker-compose.prod.yml down
 docker compose -f docker-compose.prod.yml build
 docker compose -f docker-compose.prod.yml up -d
+
+# Run migrations if requested
+if [ "$RUN_MIGRATIONS" = true ]; then
+    echo "Running database migrations..."
+    docker compose -f docker-compose.prod.yml exec -T backend python tools/manage_db.py upgrade --env prod
+    echo "Database migrations completed!"
+fi
 
 echo "==================================================="
 echo "Deployment completed!"

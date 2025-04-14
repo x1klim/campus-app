@@ -1,0 +1,72 @@
+name: Database Migrations
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run migrations on'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+      action:
+        description: 'Migration action to perform'
+        required: true
+        default: 'upgrade'
+        type: choice
+        options:
+          - upgrade
+          - downgrade
+          - history
+          - current
+      revision:
+        description: 'Revision for upgrade/downgrade (default: head)'
+        required: false
+        default: 'head'
+
+jobs:
+  migrate:
+    name: Run Database Migrations
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Run database migrations
+        env:
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          APP_PATH: ${{ secrets.APP_PATH }}
+          ENVIRONMENT: ${{ github.event.inputs.environment }}
+          ACTION: ${{ github.event.inputs.action }}
+          REVISION: ${{ github.event.inputs.revision }}
+        run: |
+          echo "Running database migrations on $ENVIRONMENT environment..."
+
+          # Construct the migration command
+          if [ "$ACTION" = "upgrade" ] || [ "$ACTION" = "downgrade" ]; then
+            MIGRATION_CMD="docker compose -f docker-compose.prod.yml exec -T backend python tools/manage_db.py $ACTION --env prod"
+            if [ "$REVISION" != "" ]; then
+              MIGRATION_CMD="$MIGRATION_CMD --revision $REVISION"
+            fi
+          else
+            MIGRATION_CMD="docker compose -f docker-compose.prod.yml exec -T backend python tools/manage_db.py $ACTION --env prod"
+          fi
+
+          # Execute the migration command
+          ssh $SSH_USER@$SERVER_IP "cd $APP_PATH && $MIGRATION_CMD"
+
+          echo "Database migrations completed successfully!"

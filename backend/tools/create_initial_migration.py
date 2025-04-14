@@ -18,8 +18,16 @@ def create_initial_migration() -> None:
     try:
         logger.info("Creating initial Alembic migration...")
 
+        # Get the absolute path to the backend directory
+        backend_dir = os.path.dirname(
+            os.path.dirname(os.path.abspath(__file__)))
+
+        # Add the backend directory to the Python path
+        sys.path.insert(0, backend_dir)
+
         # Create versions directory if it doesn't exist
-        os.makedirs("src/alembic/versions", exist_ok=True)
+        os.makedirs(os.path.join(
+            backend_dir, "src/alembic/versions"), exist_ok=True)
 
         # First make sure the models are properly registered
         # by importing them directly
@@ -45,9 +53,8 @@ def create_initial_migration() -> None:
                 "-m", "Initial migration - create all tables"
             ],
             check=True,
-            cwd=os.path.dirname(os.path.abspath(__file__)),
-            env=dict(os.environ, PYTHONPATH=os.path.dirname(
-                os.path.abspath(__file__)))
+            cwd=backend_dir,
+            env=dict(os.environ, PYTHONPATH=backend_dir)
         )
 
         logger.info("Initial migration created successfully!")
@@ -57,6 +64,4 @@ def create_initial_migration() -> None:
 
 
 if __name__ == "__main__":
-    # Add current directory to PYTHONPATH to find modules
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     create_initial_migration()
