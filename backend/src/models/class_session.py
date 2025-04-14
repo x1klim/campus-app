@@ -35,7 +35,7 @@ class ClassSession(BaseModel):
     subject_id = Column(Integer, ForeignKey(
         "subjects.id", ondelete="CASCADE"), nullable=False)
     teacher_id = Column(Integer, ForeignKey(
-        "teachers.id", ondelete="CASCADE"), nullable=False)
+        "teachers.id", ondelete="CASCADE"), nullable=True)
     time_slot_id = Column(Integer, ForeignKey(
         "time_slots.id", ondelete="CASCADE"), nullable=False)
     group_id = Column(Integer, ForeignKey(
