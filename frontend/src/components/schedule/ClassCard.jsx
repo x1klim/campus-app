@@ -41,7 +41,7 @@ const subgroupInfoVariants = {
         damping: 25,
       },
       opacity: { duration: 0.2 },
-      filter: { duration: 0.25, delay: 0.05 },
+      filter: { duration: 0.25, delay: 0.05, clamp: true },
     },
   },
   exit: {
@@ -51,7 +51,7 @@ const subgroupInfoVariants = {
     transition: {
       height: { duration: 0.2 },
       opacity: { duration: 0.15 },
-      filter: { duration: 0.15 },
+      filter: { duration: 0.15, clamp: true },
     },
   },
 };
@@ -63,6 +63,7 @@ const timeSlotVariants = {
     filter: 'blur(0px)',
     transition: {
       duration: 0.15,
+      filter: { duration: 0.15, clamp: true },
     },
   },
   exit: {
@@ -70,6 +71,7 @@ const timeSlotVariants = {
     filter: 'blur(5px)',
     transition: {
       duration: 0.1,
+      filter: { duration: 0.1, clamp: true },
     },
   },
 };
@@ -110,6 +112,7 @@ const detailsVariants = {
       type: 'spring',
       stiffness: 300,
       damping: 25,
+      filter: { duration: 0.3, clamp: true },
     },
   },
   exit: {
@@ -123,6 +126,7 @@ const detailsVariants = {
       type: 'spring',
       stiffness: 300,
       damping: 25,
+      filter: { duration: 0.3, clamp: true },
     },
   },
 };
