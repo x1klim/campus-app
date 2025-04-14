@@ -163,10 +163,14 @@ const ClassDetails = memo(({ classItem }) => {
       </div>
       <div className={styles.detailsTrailing}>
         <span>{getClassTypeLabel(classItem.class_type)}</span>
-        <span className={styles.detailsSeparator}>∙</span>
-        <span className={styles.teacher}>
-          {formatTeacherName(classItem.teacher)}
-        </span>
+        {classItem.teacher && (
+          <>
+            <span className={styles.detailsSeparator}>∙</span>
+            <span className={styles.teacher}>
+              {formatTeacherName(classItem.teacher)}
+            </span>
+          </>
+        )}
       </div>
     </Motion.motion.div>
   );
