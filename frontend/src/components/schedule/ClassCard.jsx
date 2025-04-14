@@ -8,6 +8,7 @@ import {
   formatTimeSlot,
 } from '../../utils/scheduleUtils';
 import styles from './ClassCard.module.css';
+import i18n from '../../i18n/config';
 import { useTranslation } from 'react-i18next';
 
 // Animation variants
@@ -195,7 +196,9 @@ const TimeSlotDisplay = memo(({ timeSlot, isExpanded }) => {
         {isExpanded ? (
           <Motion.motion.span
             key="expanded-time"
-            className={styles.timeSlot}
+            className={`${styles.timeSlot} ${
+              i18n.language === 'en' ? styles.enTimeSlot : ''
+            }`}
             variants={timeSlotVariants}
             initial={getInitialState()}
             animate="animate"

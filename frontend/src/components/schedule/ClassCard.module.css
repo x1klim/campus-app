@@ -62,11 +62,14 @@
   white-space: nowrap;
   font-size: var(--text-size-small);
   text-align: right;
-  line-height: 1.15;
+  line-height: 1.2;
   display: block;
+  min-width: 7ch;
+}
+
+.enTimeSlot {
   font-variant-numeric: tabular-nums;
   font-feature-settings: 'tnum';
-  min-width: 7ch;
 }
 
 /* Details */
