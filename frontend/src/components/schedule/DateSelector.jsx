@@ -16,6 +16,15 @@ const DateSelector = ({
     );
   };
 
+  const isToday = (date) => {
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
+  };
+
   return (
     <div className={styles.container}>
       {dates && dates.length > 0 ? (
@@ -29,6 +38,7 @@ const DateSelector = ({
               date.getFullYear() === selectedDate.getFullYear()
             }
             hasClasses={hasClasses(date)}
+            isToday={isToday(date)}
             onClick={onDateSelect}
           />
         ))
