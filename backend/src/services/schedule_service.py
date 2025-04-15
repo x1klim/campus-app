@@ -54,7 +54,7 @@ class ScheduleService:
                         "patronymic": class_session.teacher.patronymic,
                         "gender": class_session.teacher.gender.value if class_session.teacher.gender else None,
                         "full_name": class_session.teacher.full_name
-                    },
+                    } if class_session.teacher else None,
                     "time_slot": {
                         "id": class_session.time_slot.id,
                         "name": class_session.time_slot.name,

@@ -2,18 +2,13 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSchedule } from '../contexts/ScheduleContext';
 import Header from '../components/navigation/Header';
 import DateSelector from '../components/schedule/DateSelector';
-import DaySchedule from '../components/schedule/DaySchedule';
+import SwipeableDaySchedule from '../components/schedule/SwipeableDaySchedule';
 import styles from './ScheduleView.module.css';
 import { useTranslation } from 'react-i18next';
-import i18n from '../i18n/config';
 
 const ScheduleView = () => {
-  const {
-    getCurrentWeekDates,
-    checkHasClassesOnDate,
-    getSemesterWeekNumberForDate,
-    getWeekTypeForDate,
-  } = useSchedule();
+  const { getCurrentWeekDates, checkHasClassesOnDate } =
+    useSchedule();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [weekOffset, setWeekOffset] = useState(0);
   const [weekDates, setWeekDates] = useState(() => {
@@ -63,46 +58,6 @@ const ScheduleView = () => {
     return weekDates.filter((date) => checkHasClassesOnDate(date));
   }, [weekDates, checkHasClassesOnDate]);
 
-  // Get week number and type for the selected date
-  const weekInfo = useMemo(() => {
-    if (!selectedDate) return { number: 0, type: 'a' };
-
-    const weekNumber = getSemesterWeekNumberForDate(selectedDate);
-    const weekType = getWeekTypeForDate(selectedDate);
-
-    return {
-      number: weekNumber,
-      type: weekType.toUpperCase(),
-    };
-  }, [
-    selectedDate,
-    getSemesterWeekNumberForDate,
-    getWeekTypeForDate,
-  ]);
-
-  // Format the selected date
-  const formattedDate = useMemo(() => {
-    const dateStr = selectedDate.toLocaleDateString(i18n.language, {
-      weekday: 'long',
-      month: 'long',
-      day: 'numeric',
-    });
-    return dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
-  }, [selectedDate]);
-
-  // Format the week info
-  const formattedWeekInfo = useMemo(() => {
-    return t('schedule.weekInfo', {
-      number: weekInfo.number,
-      type:
-        i18n.language === 'en'
-          ? weekInfo.type
-          : weekInfo.type === 'A'
-          ? 'чс.'
-          : 'зн.',
-    });
-  }, [weekInfo, t]);
-
   return (
     <>
       <Header title={t('navigation.schedule')} constantBorder={true}>
@@ -116,11 +71,10 @@ const ScheduleView = () => {
         />
       </Header>
       <div className={styles.container}>
-        <div className={styles.header}>
-          <h2 className={styles.date}>{formattedDate}</h2>
-          <span className={styles.weekInfo}>{formattedWeekInfo}</span>
-        </div>
-        <DaySchedule date={selectedDate} />
+        <SwipeableDaySchedule
+          date={selectedDate}
+          onDateChange={handleDateSelect}
+        />
       </div>
     </>
   );
