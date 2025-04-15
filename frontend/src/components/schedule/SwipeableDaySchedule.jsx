@@ -8,10 +8,12 @@ import {
 } from '../../utils/scheduleUtils';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n/config';
+import useFeatures from '../../hooks/useFeatures';
 
 const SwipeableDaySchedule = ({ date, onDateChange }) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const { t } = useTranslation();
+  const features = useFeatures();
 
   const dates = useMemo(() => {
     const prevDate = new Date(date);
@@ -88,6 +90,13 @@ const SwipeableDaySchedule = ({ date, onDateChange }) => {
       </div>
     );
   };
+
+  // If the feature is disabled
+  if (!features.enableDayScheduleSwiping) {
+    return (
+      <div className={styles.container}>{renderDayView(date)}</div>
+    );
+  }
 
   return (
     <div className={styles.container}>
