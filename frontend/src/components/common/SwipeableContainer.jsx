@@ -95,7 +95,12 @@ const SwipeableContainer = ({
       onScroll={handleScroll}
     >
       {items.map((item, index) => (
-        <div key={index} className={styles.item}>
+        <div
+          key={`${item.id || index}`}
+          className={styles.item}
+          data-index={index}
+          data-id={item.id || ''}
+        >
           {renderItem(item, index === 1)}
         </div>
       ))}

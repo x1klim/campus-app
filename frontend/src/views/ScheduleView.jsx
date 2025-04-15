@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSchedule } from '../contexts/ScheduleContext';
 import Header from '../components/navigation/Header';
-import DateSelector from '../components/schedule/DateSelector';
+import SwipeableDateSelector from '../components/schedule/SwipeableDateSelector';
 import SwipeableDaySchedule from '../components/schedule/SwipeableDaySchedule';
 import styles from './ScheduleView.module.css';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +16,9 @@ const ScheduleView = () => {
     return getCurrentWeekDates(0);
   });
 
+  const [prevWeekDates, setPrevWeekDates] = useState([]);
+  const [nextWeekDates, setNextWeekDates] = useState([]);
+
   const { t } = useTranslation();
 
   // Update week dates when the week offset changes
@@ -23,7 +26,12 @@ const ScheduleView = () => {
     const newDates = getCurrentWeekDates(weekOffset);
     setWeekDates(newDates);
 
-    // Update selected date to be within the new week range if it's not already
+    const prevDates = getCurrentWeekDates(weekOffset - 1);
+    setPrevWeekDates(prevDates);
+
+    const nextDates = getCurrentWeekDates(weekOffset + 1);
+    setNextWeekDates(nextDates);
+
     setSelectedDate((prev) => {
       // Make sure we have dates before trying to filter
       if (!newDates || newDates.length === 0) {
@@ -36,9 +44,72 @@ const ScheduleView = () => {
           date.getMonth() === prev.getMonth() &&
           date.getFullYear() === prev.getFullYear()
       );
-      return isWithinWeek ? prev : newDates[0];
+
+      if (isWithinWeek) {
+        return prev;
+      } else {
+        const currentDayOfWeek = prev.getDay();
+        const sameDayOfWeek = newDates.find(
+          (date) => date.getDay() === currentDayOfWeek
+        );
+
+        // Fall back to first day of week if same day not found
+        return sameDayOfWeek || newDates[0];
+      }
     });
   }, [weekOffset, getCurrentWeekDates]);
+
+  // Check if selected date is within current week and adjust week if needed
+  useEffect(() => {
+    if (!weekDates || weekDates.length === 0) return;
+    const isInCurrentWeek = weekDates.some(
+      (date) =>
+        date.getDate() === selectedDate.getDate() &&
+        date.getMonth() === selectedDate.getMonth() &&
+        date.getFullYear() === selectedDate.getFullYear()
+    );
+
+    if (!isInCurrentWeek) {
+      const isInNextWeek = nextWeekDates.some(
+        (date) =>
+          date.getDate() === selectedDate.getDate() &&
+          date.getMonth() === selectedDate.getMonth() &&
+          date.getFullYear() === selectedDate.getFullYear()
+      );
+
+      if (isInNextWeek) {
+        setWeekOffset((prev) => prev + 1);
+        return;
+      }
+
+      const isInPrevWeek = prevWeekDates.some(
+        (date) =>
+          date.getDate() === selectedDate.getDate() &&
+          date.getMonth() === selectedDate.getMonth() &&
+          date.getFullYear() === selectedDate.getFullYear()
+      );
+
+      if (isInPrevWeek) {
+        setWeekOffset((prev) => prev - 1);
+        return;
+      }
+
+      // If date is not in adjacent weeks, find the correct week offset
+      const selectedWeekStart = new Date(selectedDate);
+      selectedWeekStart.setDate(
+        selectedWeekStart.getDate() - selectedWeekStart.getDay() + 1
+      );
+
+      const currentWeekStart = new Date(weekDates[0]);
+
+      const diffTime =
+        selectedWeekStart.getTime() - currentWeekStart.getTime();
+      const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+      const diffWeeks = Math.round(diffDays / 7);
+
+      setWeekOffset((prev) => prev + diffWeeks);
+    }
+  }, [selectedDate, weekDates, nextWeekDates, prevWeekDates]);
 
   const handleDateSelect = useCallback((date) => {
     setSelectedDate(date);
@@ -58,16 +129,34 @@ const ScheduleView = () => {
     return weekDates.filter((date) => checkHasClassesOnDate(date));
   }, [weekDates, checkHasClassesOnDate]);
 
+  const prevWeekDatesWithClasses = useMemo(() => {
+    if (!prevWeekDates) return [];
+    return prevWeekDates.filter((date) =>
+      checkHasClassesOnDate(date)
+    );
+  }, [prevWeekDates, checkHasClassesOnDate]);
+
+  const nextWeekDatesWithClasses = useMemo(() => {
+    if (!nextWeekDates) return [];
+    return nextWeekDates.filter((date) =>
+      checkHasClassesOnDate(date)
+    );
+  }, [nextWeekDates, checkHasClassesOnDate]);
+
   return (
     <>
       <Header title={t('navigation.schedule')} constantBorder={true}>
-        <DateSelector
+        <SwipeableDateSelector
           dates={weekDates}
+          prevWeekDates={prevWeekDates}
+          nextWeekDates={nextWeekDates}
           selectedDate={selectedDate}
           onDateSelect={handleDateSelect}
           onPreviousWeek={handlePreviousWeek}
           onNextWeek={handleNextWeek}
           datesWithClasses={datesWithClasses}
+          prevWeekDatesWithClasses={prevWeekDatesWithClasses}
+          nextWeekDatesWithClasses={nextWeekDatesWithClasses}
         />
       </Header>
       <div className={styles.container}>

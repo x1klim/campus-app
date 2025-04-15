@@ -5,8 +5,6 @@ const DateSelector = ({
   dates,
   selectedDate,
   onDateSelect,
-  // onPreviousWeek,
-  // onNextWeek,
   datesWithClasses = [],
 }) => {
   const hasClasses = (date) => {
@@ -35,7 +33,7 @@ const DateSelector = ({
           />
         ))
       ) : (
-        <div className={styles.loadingDates}>Loading dates...</div>
+        <div className={styles.loadingDates}>...</div>
       )}
     </div>
   );
