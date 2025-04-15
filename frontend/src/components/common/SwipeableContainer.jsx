@@ -20,25 +20,6 @@ const SwipeableContainer = ({
     }
   }, [items]);
 
-  // // Backup using regular effect in case layout effect doesn't work in all environments
-  // useEffect(() => {
-  //   if (containerRef.current) {
-  //     // Synchronous update one more time to be sure
-  //     containerRef.current.scrollLeft =
-  //       containerRef.current.offsetWidth;
-
-  //     // And once more after a brief delay to catch any race conditions
-  //     const timer = setTimeout(() => {
-  //       if (containerRef.current) {
-  //         containerRef.current.scrollLeft =
-  //           containerRef.current.offsetWidth;
-  //       }
-  //     }, 50);
-
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [items]);
-
   useEffect(() => {
     return () => {
       if (scrollTimeout) {
@@ -76,12 +57,6 @@ const SwipeableContainer = ({
         onSwipe(-1);
       } else if (isAtEnd) {
         onSwipe(1);
-      } else if (Math.abs(scrollLeft - containerWidth) > 50) {
-        // If not at edge but significantly offset from center, snap back to center
-        container.scrollTo({
-          left: containerWidth,
-          behavior: 'smooth',
-        });
       }
     }, 150);
 
