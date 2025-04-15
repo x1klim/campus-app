@@ -1,12 +1,12 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 22px;
   max-width: 800px;
   margin: 0 auto;
-  padding: 32px 22px;
   background-color: black;
   color: white;
+  overflow: hidden;
+  position: relative;
 }
 
 .title {
@@ -22,6 +22,8 @@
   justify-content: space-between;
   gap: 12px;
   align-items: center;
+  margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
 .date {
@@ -34,4 +36,13 @@
   color: var(--color-text-muted);
   font-weight: 500;
   white-space: nowrap;
+}
+
+.scheduleContainer {
+  flex: 1;
+  height: 0; /* Allow flex-grow to determine height */
+  min-height: 300px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }

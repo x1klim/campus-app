@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  width: 100%;
+  touch-action: pan-x;
+  position: relative;
+  transform: translateZ(0);
+  scroll-behavior: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.container::-webkit-scrollbar {
+  display: none;
+}
+
+.item {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  user-select: none;
+  will-change: transform;
+}
