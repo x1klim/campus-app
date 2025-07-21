@@ -1,4 +1,4 @@
-<img src="/hero_image.jpg" width="100%" alt="Valor AI Support Service">
+<img src="/hero_image.png" width="100%" alt="Valor AI Support Service">
 
 # Кампус
 
